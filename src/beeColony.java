@@ -106,7 +106,6 @@ public  class beeColony {
 		trial[index]=0;
 	}
 
-
 	/*All food sources are initialised */
 	void initial()
 	{
@@ -118,8 +117,6 @@ public  class beeColony {
 		GlobalMin=f[0];//set an initial value for the best distribution.
 	    for(i=0;i<D;i++)
 	    GlobalParams[i]=Foods[0][i];//parameters of that initial value.
-
-
 	}
 	/* In this function an
 	 * artificially employed bee generates a random

@@ -1,0 +1,5 @@
+Use like this:
+
+String address = "Rehovot max and ampro Shayne 14/58 rehovot";
+GoogleMapsClient googleMapsClient = new GoogleMapsClient();
+Location location = googleMapsClient.getLocation(address);
