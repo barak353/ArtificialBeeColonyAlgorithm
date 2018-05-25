@@ -9,8 +9,8 @@ public class test {
 		//srand(time(NULL));
 		for(run=0;run<bee.runtime;run++)
 		{
-		bee.initial();
-		bee.MemorizeBestSource();
+		bee.initial();//Initialise each distribution's probability with a random value.
+		bee.MemorizeBestSource();//save the best distribution's value.
 		for (iter=0;iter<bee.maxCycle;iter++)
 		    {
 			bee.SendEmployedBees();

@@ -14,7 +14,11 @@ public  class beeColony {
 	int D = 100; /*The number of parameters of the problem to be optimized*/
 	double lb = -5.12; /*lower bound of the parameters. */
 	double ub = 5.12; /*upper bound of the parameters. lb and ub can be defined as arrays for the problems of which parameters have different bounds*/
-
+/*
+ * food sources = Deliveries distribution to a specific agent/
+ * 
+ * 
+ */
 
 	int runtime = 30;  /*Algorithm can be run many times in order to see its robustness*/
 
@@ -70,13 +74,13 @@ public  class beeColony {
 	 }
 
 	/*The best food source is memorized*/
-	void MemorizeBestSource() 
+	void MemorizeBestSource() // will save in GlobalMin the f value of the best distribution (f in our case can be sol[0]*1 + sol[1]*2 +...).
 	{
 	   int i,j;
 	    
 		for(i=0;i<FoodNumber;i++)
 		{
-		if (f[i]<GlobalMin)
+		if (f[i]<GlobalMin)//instead of performing fitness > GlobalMax we perform a more intuitive compression. 
 			{
 	        GlobalMin=f[i];
 	        for(j=0;j<D;j++)
@@ -87,24 +91,23 @@ public  class beeColony {
 
 	/*Variables are initialized in the range [lb,ub]. If each parameter has different range, use arrays lb[j], ub[j] instead of lb and ub */
 	/* Counters of food sources are also initialized in this function*/
-
-
+	//Initialize the parameters of food source number index with the value in range [lb,ub].  
 	void init(int index)
 	{
 	   int j;
 	   for (j=0;j<D;j++)
 			{
-	        r = (   (double)Math.random()*32767 / ((double)32767+(double)(1)) );
+	        r = (   (double)Math.random()*32767 / ((double)32767+(double)(1)) );//random number between 0 to 1.
 	        Foods[index][j]=r*(ub-lb)+lb;
 			solution[j]=Foods[index][j];
 			}
-		f[index]=calculateFunction(solution);
-		fitness[index]=CalculateFitness(f[index]);
+		f[index]=calculateFunction(solution);//will store value the evaluate the fitness of food source/distribution number index (higher is batter for choosing this distribution for this agent).
+		fitness[index]=CalculateFitness(f[index]);//Just perform 1/f[index] so f[index] should be higher if this distribution is worser.
 		trial[index]=0;
 	}
 
 
-	/*All food sources are initialized */
+	/*All food sources are initialised */
 	void initial()
 	{
 		int i;
@@ -112,22 +115,25 @@ public  class beeColony {
 		{
 		init(i);
 		}
-		GlobalMin=f[0];
+		GlobalMin=f[0];//set an initial value for the best distribution.
 	    for(i=0;i<D;i++)
-	    GlobalParams[i]=Foods[0][i];
+	    GlobalParams[i]=Foods[0][i];//parameters of that initial value.
 
 
 	}
-
+	/* In this function an
+	 * artificially employed bee generates a random
+	 * solution that is a mutant of the original solution. 
+	 */
 	void SendEmployedBees()
 	{
 	  int i,j;
 	  /*Employed Bee Phase*/
 	   for (i=0;i<FoodNumber;i++)
 	        {
-	        /*The parameter to be changed is determined randomly*/
+	        /*In each distribution the parameter to be changed is determined randomly*/
 	        r = ((double) Math.random()*32767 / ((double)(32767)+(double)(1)) );
-	        param2change=(int)(r*D);
+	        param2change=(int)(r*D);//parameter index to be changed.
 	        
 	        /*A randomly chosen solution is used in producing a mutant solution of the solution i*/
 	        r = (   (double)Math.random()*32767 / ((double)(32767)+(double)(1)) );
@@ -143,6 +149,7 @@ public  class beeColony {
 	        solution[j]=Foods[i][j];
 
 	        /*v_{ij}=x_{ij}+\phi_{ij}*(x_{kj}-x_{ij}) */
+	        //
 	        r = (   (double)Math.random()*32767 / ((double)(32767)+(double)(1)) );
 	        solution[param2change]=Foods[i][param2change]+(Foods[i][param2change]-Foods[neighbour][param2change])*(r-0.5)*2;
 
@@ -157,7 +164,6 @@ public  class beeColony {
 	        /*a greedy selection is applied between the current solution i and its mutant*/
 	        if (FitnessSol>fitness[i])
 	        {
-	        
 	        /*If the mutant solution is better than the current solution i, replace the solution with the mutant and reset the trial counter of solution i*/
 	        trial[i]=0;
 	        for(j=0;j<D;j++)
@@ -331,7 +337,7 @@ return Rastrigin (sol);
 		 return top;
 	 }
 
-	 double Rastrigin(double sol[])
+	 double Rastrigin(double sol[])//sol is array of value in the range [lb,ub] that as given to evaluate each parameters for specific food source (distribution).
 	 {
 		 int j;
 		 double top=0;
@@ -339,6 +345,11 @@ return Rastrigin (sol);
 		 for(j=0;j<D;j++)
 		 {
 			 top=top+(Math.pow(sol[j],(double)2)-10*Math.cos(2*Math.PI*sol[j])+10);
+			 /*
+			  * Firstly we want to change their function and use our function because we have parameter in different importance. To do that we will use this function instead: return sol[0]*1 + sol[1]*2 +sol[2]*3 + .. + sol[D]*(D-1). It should return higher number if we want to give this distribution lower probability to be chose. 
+			  * We will define each parameter and will we set sol[0] to be with the lower importance and sol[D] with the higher importance, we should normalize each parameter to be in the range between 0 to 1.
+			  * for example we can set parameter sol[0] to be the total distance that the courier should do on order to ending all the deliveries to their destinations, and sol[2] should be more important parameter that we want to give him higher importance. For example, sol[2] will be the percentage of urgent deliveries from the total deliveries in the distribution. sol[3] should be more important parameter such as the percentage of deliveries that are in the agent's perferres area.
+			  */
 		 }
 		 return top;
 	 }
