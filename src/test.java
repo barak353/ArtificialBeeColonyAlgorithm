@@ -18,15 +18,34 @@ public class test {
 		
 		for(run=0;run<bee.runtime;run++)
 		{
+			
+			/*The new code have to be:
+			 * for(run=0;run<bee.runtime;run++)
+			{
+			bee.initial();
+			bee.MemorizeBestSource();
+			for(iter=0;iter<bee.maxCyclel;iter++)
+			{
+			bee.SendEmployedBees();
+			bee.SendOnlookers();
+			bee.MemorizeBestSource();
+			bee.SendScoutBees();
+					}
+				}
+			bee.MemorizeBestSource();//It will return the final best source.
+			*/
+			
+			
 		bee.initial();//Initialise each distribution's fitness with a random value.
 		bee.MemorizeBestSource();//save the best distribution's value.
 		for (iter=0;iter<bee.maxCycle;iter++)
-		    {
+		    { 
+			//Don't need bee.SendEmployedBees(); delete it later.
 			bee.SendEmployedBees();//employed bee phase - artificially employed bee generates a random solution that is a mutant of the original solution and replace it with the current solution if it have higher fitness (solution = distribution), and this is perform for each distribution*/
-			bee.CalculateProbabilities();//Transfer fitness value to probability (still higher probability is better solution).
+			bee.CalculateProbabilities();//This will be called:bee.SendEmployedBees(); and inside it we will call the bee.CalculateProbabilities() function because this function does what the employed foragers should do. More detail: Transfer fitness value to probability (still higher probability is better solution).
 			bee.SendOnlookerBees();//Those bees perform the same operation as employed bees, they will create a mutants from each distribution and will replace his parameters with the tested distribution if it's have higher fitness. 
-			bee.MemorizeBestSource();//save in globalMin the parameters of the distribution with the higher fitness.
 			bee.SendScoutBees();//discard an distribution with minimum values for his parameter because we want to keep the random process.
+			bee.MemorizeBestSource();//save in globalMin the parameters of the distribution with the higher fitness.
 		    }
 		for(j=0;j<bee.D;j++)//bee.D is the number of parameters.
 		{
@@ -47,3 +66,5 @@ public class test {
 	}
 
 }
+
+

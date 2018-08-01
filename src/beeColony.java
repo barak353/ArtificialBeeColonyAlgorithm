@@ -94,9 +94,9 @@ public  class beeColony {
 	/* Counters of food sources are also initialized in this function*/
 	//Initialize the parameters of food source number index with the value in range [lb,ub].  
 	void init(int index)
-	{
+	{//Important: We have list of all deliveries that are valid for this agent, and we need to give each delivery an index and we will randomise D indexes for that agent, that means we randomise to each agent D deliveries. 
 	   int j;
-	   for (j=0;j<D;j++)
+	   for (j=0;j<D;j++)//remove this we don't want to random parameters.
 			{
 	        r = (   (double)Math.random()*32767 / ((double)32767+(double)(1)) );//random number between 0 to 1.
 	        Foods[index][j]=r*(ub-lb)+lb;
@@ -279,7 +279,7 @@ public  class beeColony {
 
 	/*determine the food sources whose trial counter exceeds the "limit" value. In Basic ABC, only one scout is allowed to occur in each cycle
 	 * The scouts carry out a random search process for discovering new food sources.
-	 * trail - if the solution i can not be improved, increase its trial counter
+	 * trail - if the solution is can not be improved, increase its trial counter
 	 */
 	void SendScoutBees()
 	{
