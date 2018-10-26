@@ -15,7 +15,7 @@ public  class beeColony {
 	double lb = -5.12; /*lower bound of the parameters. */
 	double ub = 5.12; /*upper bound of the parameters. lb and ub can be defined as arrays for the problems of which parameters have different bounds*/
 /*
- * food sources = Deliveries distribution to a specific agent/
+ * food sources = Deliveries distribution to a specific courier/
  * 
  * 
  */
@@ -94,7 +94,7 @@ public  class beeColony {
 	/* Counters of food sources are also initialized in this function*/
 	//Initialize the parameters of food source number index with the value in range [lb,ub].  
 	void init(int index)
-	{//Important: We have list of all deliveries that are valid for this agent, and we need to give each delivery an index and we will randomise D indexes for that agent, that means we randomise to each agent D deliveries. 
+	{//Important: We have list of all deliveries that are valid for this courier, and we need to give each delivery an index and we will randomise D indexes for that courier, that means we randomise to each courier D deliveries. 
 	   int j;
 	   for (j=0;j<D;j++)//remove this we don't want to random parameters.
 			{
@@ -102,7 +102,7 @@ public  class beeColony {
 	        Foods[index][j]=r*(ub-lb)+lb;
 			solution[j]=Foods[index][j];
 			}
-		f[index]=calculateFunction(solution);//will store value the evaluate the fitness of food source/distribution number index (higher is batter for choosing this distribution for this agent).
+		f[index]=calculateFunction(solution);//will store value the evaluate the fitness of food source/distribution number index (higher is batter for choosing this distribution for this courier).
 		fitness[index]=CalculateFitness(f[index]);//Just perform 1/f[index] so f[index] should be higher if this distribution is worser.
 		trial[index]=0;//initialise number of improved for this distribution that will be fail latter on.
 	}
@@ -354,7 +354,7 @@ return Rastrigin (sol);
 			 /*
 			  * Firstly we want to change their function and use our function because we have parameter in different importance. To do that we will use this function instead: return sol[0]*1 + sol[1]*2 +sol[2]*3 + .. + sol[D]*(D-1). It should return higher number if we want to give this distribution lower probability to be chose. 
 			  * We will define each parameter and will we set sol[0] to be with the lower importance and sol[D] with the higher importance, we should normalise each parameter to be in the range between 0 to 1.
-			  * for example we can set parameter sol[0] to be the total distance that the courier should do on order to ending all the deliveries to their destinations, and sol[2] should be more important parameter that we want to give him higher importance. For example, sol[2] will be the percentage of urgent deliveries from the total deliveries in the distribution. sol[3] should be more important parameter such as the percentage of deliveries that are in the agent's perferres area.
+			  * for example we can set parameter sol[0] to be the total distance that the courier should do on order to ending all the deliveries to their destinations, and sol[2] should be more important parameter that we want to give him higher importance. For example, sol[2] will be the percentage of urgent deliveries from the total deliveries in the distribution. sol[3] should be more important parameter such as the percentage of deliveries that are in the courier's perferres area.
 			  */
 		 }
 		 return top;
